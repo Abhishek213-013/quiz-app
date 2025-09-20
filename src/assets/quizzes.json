@@ -1,0 +1,82 @@
+[
+  {
+    "question": "2 + 2 = ?",
+    "options": ["3", "4", "5", "1"],
+    "answer": "4"
+  },
+  {
+    "question": "Capital of France?",
+    "options": ["London", "Paris", "Munich", "Rome"],
+    "answer": "Paris"
+  },
+  {
+    "question": "Vue.js is a ?",
+    "options": ["Library", "Framework", "Language", "Tool"],
+    "answer": "Library"
+  },
+  {
+    "question": "What is the capital of Portugal?",
+    "options": ["Paris", "London", "Berlin", "Lisbon"],
+    "answer": "Lisbon"
+  },
+  {
+    "question": "Who wrote 'Romeo and Juliet'?",
+    "options": ["Shakespeare", "Tolstoy", "Hemingway", "Orwell"],
+    "answer": "Shakespeare"
+  },
+  {
+    "question": "What is 7 x 8?",
+    "options": ["54", "56", "64", "49"],
+    "answer": "56"
+  },
+  {
+    "question": "Which planet is known as the Red Planet?",
+    "options": ["Earth", "Venus", "Mars", "Jupiter"],
+    "answer": "Mars"
+  },
+  {
+    "question": "What is the largest mammal?",
+    "options": ["Elephant", "Blue Whale", "Giraffe", "Hippo"],
+    "answer": "Blue Whale"
+  },
+  {
+    "question": "Which language runs in a web browser?",
+    "options": ["Python", "Java", "C#", "JavaScript"],
+    "answer": "JavaScript"
+  },
+  {
+    "question": "What is the boiling point of water?",
+    "options": ["100°C", "90°C", "80°C", "120°C"],
+    "answer": "100°C"
+  },
+  {
+    "question": "Who painted the Mona Lisa?",
+    "options": ["Van Gogh", "Da Vinci", "Picasso", "Michelangelo"],
+    "answer": "Da Vinci"
+  },
+  {
+    "question": "Which gas do plants absorb?",
+    "options": ["Oxygen", "Nitrogen", "Hydrogen", "Carbon Dioxide"],
+    "answer": "Carbon Dioxide"
+  },
+  {
+    "question": "Which country is famous for sushi?",
+    "options": ["China", "Japan", "Thailand", "Korea"],
+    "answer": "Japan"
+  },
+  {
+    "question": "Which element has the chemical symbol 'O'?",
+    "options": ["Oxygen", "Gold", "Silver", "Iron"],
+    "answer": "Oxygen"
+  },
+  {
+    "question": "What is the fastest land animal?",
+    "options": ["Cheetah", "Lion", "Tiger", "Horse"],
+    "answer": "Cheetah"
+  },
+  {
+    "question": "Who is the current President of America?",
+    "options": ["Barrack Obama", "Osama Bin Laden", "Donald Trump", "George Bush"],
+    "answer": "Donald Trump"
+  }
+]
