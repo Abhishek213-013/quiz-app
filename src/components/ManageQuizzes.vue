@@ -66,12 +66,18 @@
 <script setup>
 import { reactive, onMounted } from 'vue'
 import logo from '../assets/logo.png'
+import quizzesData from '../assets/quizzes.json'  // ✅ Import default quizzes
 
 const quizzes = reactive([])
 
 onMounted(() => {
-  const stored = JSON.parse(localStorage.getItem('quizzes')) || []
-  quizzes.push(...stored)
+  const stored = JSON.parse(localStorage.getItem('quizzes'))
+  if (stored && stored.length > 0) {
+    quizzes.push(...stored)
+  } else {
+    quizzes.push(...quizzesData)  // ✅ Use quizzes.json if no local quizzes exist
+    saveQuizzes()                // ✅ Save them to localStorage so they persist
+  }
 })
 
 function saveQuizzes() {
@@ -86,6 +92,7 @@ function addQuiz() {
   const options = optionsStr.split(',').map(o => o.trim())
   const answerIndex = parseInt(prompt(`Enter correct option index (0-${options.length - 1}):`))
   if (isNaN(answerIndex) || answerIndex < 0 || answerIndex >= options.length) return alert("Invalid answer index!")
+  
   quizzes.push({ id: Date.now(), question, options, answer: answerIndex })
   saveQuizzes()
 }
@@ -99,6 +106,7 @@ function editQuiz(index) {
   const options = optionsStr.split(',').map(o => o.trim())
   const answerIndex = parseInt(prompt(`Edit correct option index (0-${options.length - 1}):`, quiz.answer))
   if (isNaN(answerIndex) || answerIndex < 0 || answerIndex >= options.length) return alert("Invalid answer index!")
+  
   quiz.question = question
   quiz.options = options
   quiz.answer = answerIndex
@@ -115,8 +123,8 @@ function deleteQuiz(index) {
 function goDashboard() {
   router.push('/')
 }
-
 </script>
+
 
 <style>
 /* Card slide animation */
