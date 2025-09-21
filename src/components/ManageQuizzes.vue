@@ -124,22 +124,26 @@ onMounted(() => {
   if (stored.length > 0) {
     quizSets.push(...stored)
   } else {
-    // Load default quizzes from quizzes.json
     quizzesData.forEach(set => {
       quizSets.push({
         id: set.id || Date.now() + Math.random(),
         title: set.title,
-        questions: set.questions.map(q => ({
-          id: q.id || Date.now() + Math.random(),
-          question: q.question,
-          options: [...q.options],
-          answer: q.answer
-        }))
+        questions: set.questions.map(q => {
+          // Convert string answer into index
+          const answerIndex = q.options.findIndex(opt => opt === q.answer)
+          return {
+            id: q.id || Date.now() + Math.random(),
+            question: q.question,
+            options: [...q.options],
+            answer: answerIndex >= 0 ? answerIndex : 0 // fallback to first option if not found
+          }
+        })
       })
     })
     localStorage.setItem('quizSets', JSON.stringify(quizSets))
   }
 })
+
 
 // Open Add Set Modal
 function openAddSetModal() {
