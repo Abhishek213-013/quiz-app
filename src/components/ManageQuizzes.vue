@@ -27,22 +27,25 @@
           @click="openEditSetModal(set)"
           class="p-6 bg-gradient-to-r from-gray-200 to-gray-600 bg-opacity-20 backdrop-blur-md rounded-xl shadow cursor-pointer transform transition hover:scale-105 hover:shadow-2xl"
         >
-          <h2 class="font-semibold text-lg text-black">{{ set.name }}</h2>
+          <h2 class="font-semibold text-lg text-black">{{ set.title }}</h2>
           <p class="text-gray-700 mt-2">{{ set.questions.length }} questions</p>
         </div>
       </div>
     </div>
 
     <!-- Modal for Add/Edit Quiz Set -->
-    <div v-if="modalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+    <div
+      v-if="modalOpen"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+    >
       <div class="bg-white rounded-2xl p-6 w-full max-w-3xl overflow-y-auto max-h-[90vh]">
         <h2 class="text-xl font-bold mb-4">{{ editingSet ? 'Edit Set' : 'Add New Set' }}</h2>
 
-        <!-- Set Name -->
+        <!-- Set Title -->
         <input
-          v-model="currentSet.name"
+          v-model="currentSet.title"
           type="text"
-          placeholder="Set Name"
+          placeholder="Set Title"
           class="w-full p-3 border rounded mb-4"
         />
 
@@ -78,7 +81,7 @@
 
           <div class="mt-2">
             Correct Answer:
-            <select v-model.number="q.answer" class="border p-1 rounded">
+            <select v-model="q.answer" class="border p-1 rounded">
               <option v-for="(opt, i) in q.options" :key="i" :value="i">{{ i + 1 }}. {{ opt }}</option>
             </select>
           </div>
@@ -112,23 +115,26 @@ import quizzesData from '../assets/quizzes.json'
 const quizSets = reactive([])
 const modalOpen = ref(false)
 const editingSet = ref(false)
-const currentSet = reactive({ id: null, name: '', questions: [] })
+const currentSet = reactive({ id: null, title: '', questions: [] })
 
 // Load sets from localStorage or quizzes.json
 onMounted(() => {
   const stored = JSON.parse(localStorage.getItem('quizSets')) || []
+
   if (stored.length > 0) {
     quizSets.push(...stored)
   } else {
+    // Load default quizzes from quizzes.json
     quizzesData.forEach(set => {
       quizSets.push({
         id: set.id || Date.now() + Math.random(),
-        name: set.name, // ✅ unified naming
+        title: set.title,
         questions: set.questions.map(q => ({
           id: q.id || Date.now() + Math.random(),
           question: q.question,
           options: [...q.options],
-          answer: q.answer
+          // ✅ Ensure answer is always stored as number
+          answer: typeof q.answer === 'string' ? parseInt(q.answer, 10) : q.answer ?? 0
         }))
       })
     })
@@ -136,55 +142,64 @@ onMounted(() => {
   }
 })
 
+// Open Add Set Modal
 function openAddSetModal() {
   currentSet.id = Date.now()
-  currentSet.name = ''
+  currentSet.title = ''
   currentSet.questions = []
   editingSet.value = false
   modalOpen.value = true
 }
 
+// Open Edit Set Modal
 function openEditSetModal(set) {
   currentSet.id = set.id
-  currentSet.name = set.name
+  currentSet.title = set.title
   currentSet.questions = set.questions.map(q => ({
     id: q.id,
     question: q.question,
     options: [...q.options],
-    answer: q.answer
+    answer: typeof q.answer === 'string' ? parseInt(q.answer, 10) : q.answer ?? 0
   }))
   editingSet.value = true
   modalOpen.value = true
 }
 
+// Add new question
 function addQuestion() {
-  currentSet.questions.push({ id: Date.now() + Math.random(), question: '', options: ['', ''], answer: 0 })
+  currentSet.questions.push({ id: Date.now() + Math.random(), question: '', options: ['',''], answer: 0 })
 }
 
+// Remove question
 function removeQuestion(index) {
   currentSet.questions.splice(index, 1)
 }
 
+// Add option to a question
 function addOption(qIndex) {
   currentSet.questions[qIndex].options.push('')
 }
 
+// Remove option from a question
 function removeOption(qIndex, optIndex) {
   currentSet.questions[qIndex].options.splice(optIndex, 1)
 }
 
+// Save set
 function saveSet() {
-  if (!currentSet.name.trim()) return alert('Set name required!')
+  if (!currentSet.title.trim()) return alert('Set title required!')
 
   const existingIndex = quizSets.findIndex(s => s.id === currentSet.id)
+
   const setCopy = {
     id: currentSet.id,
-    name: currentSet.name,
+    title: currentSet.title,
     questions: currentSet.questions.map(q => ({
       id: q.id || Date.now() + Math.random(),
       question: q.question,
       options: [...q.options],
-      answer: q.answer
+      // ✅ Store answer as number
+      answer: typeof q.answer === 'string' ? parseInt(q.answer, 10) : q.answer ?? 0
     }))
   }
 
@@ -198,7 +213,9 @@ function saveSet() {
   modalOpen.value = false
 }
 
+// Close modal
 function closeModal() {
   modalOpen.value = false
 }
 </script>
+
