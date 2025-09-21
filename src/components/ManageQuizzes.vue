@@ -1,25 +1,15 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-r from-indigo-600 to-blue-500">
+  <div class="min-h-screen bg-gradient-to-r from-gray-100 to-gray-300">
     <!-- Navbar -->
-    <nav class="w-full bg-indigo-600 bg-opacity-20 backdrop-blur-md p-4 flex items-center shadow-md">
-      <div class="flex items-center space-x-3">
-        <!-- Logo -->
-        <img :src="logo" alt="Logo" class="w-10 h-10 object-contain">
-        <!-- Title -->
-        <div @click="goDashboard" class="text-white text-2xl font-bold drop-shadow-lg cursor-pointer">
-          MindSpark
-        </div>
-      </div>
-    </nav>
+    <Navbar />
 
     <div class="flex items-start">
       <!-- Sidebar -->
-      <aside class="w-64 bg-gradient-to-r from-indigo-600 to-blue-500 bg-opacity-20 backdrop-blur-md shadow-md p-6 hidden md:flex flex-col space-y-5"
-             style="padding-bottom: 2cm;">
-        <router-link to="/" class="font-semibold text-black hover:text-indigo-200">Dashboard</router-link>
-        <router-link to="/quiz" class="font-semibold text-black hover:text-indigo-200">Take Quiz</router-link>
-        <router-link to="/manage" class="font-semibold text-black hover:text-indigo-200">Manage Quizzes</router-link>
-        <router-link to="/records" class="font-semibold text-black hover:text-indigo-200">Previous Records</router-link>
+      <aside class="w-64 bg-gradient-to-r from-gray-100 to-gray-200 bg-opacity-20 backdrop-blur-md shadow-md p-6 hidden md:flex flex-col space-y-8">
+        <router-link to="/" class="font-semibold text-black hover:text-gray-500">Dashboard</router-link>
+        <router-link to="/quiz" class="font-semibold text-black hover:text-gray-500">Take Quiz</router-link>
+        <router-link to="/manage" class="font-semibold text-black hover:text-gray-500">Manage Quizzes</router-link>
+        <router-link to="/records" class="font-semibold text-black hover:text-gray-500">Previous Records</router-link>
       </aside>
 
       <!-- Main Content -->
@@ -27,7 +17,7 @@
         <h1 class="text-3xl md:text-4xl font-bold text-indigo-950 mb-6 drop-shadow-lg">Manage Quizzes</h1>
 
         <button @click="addQuiz"
-                class="mb-6 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl shadow font-semibold transform hover:scale-105 transition">
+                class="mb-6 bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-xl shadow font-semibold transform hover:scale-105 transition">
           Add New Quiz
         </button>
 
@@ -37,9 +27,9 @@
 
         <transition-group name="card" tag="div">
           <div v-for="(quiz, index) in quizzes" :key="quiz.id"
-               class="p-6 bg-gradient-to-r from-indigo-700 to-purple-800 bg-opacity-20 backdrop-blur-md rounded-xl shadow mb-4 transition transform hover:scale-105 hover:shadow-2xl hover:from-indigo-500 hover:to-purple-500 cursor-pointer">
+               class="p-6 bg-gradient-to-r from-gray-200 to-gray-600 bg-opacity-20 backdrop-blur-md rounded-xl shadow mb-4 transition transform hover:scale-105 hover:shadow-2xl hover:from-gray-500 hover:to-gray-700 cursor-pointer">
             <div class="flex justify-between items-center">
-              <p class="font-semibold text-white text-lg">{{ index + 1 }}. {{ quiz.question }}</p>
+              <p class="font-semibold text-black text-lg">{{ index + 1 }}. {{ quiz.question }}</p>
               <div class="space-x-2">
                 <button @click="editQuiz(index)"
                         class="bg-yellow-400 hover:bg-yellow-500 px-3 py-1 rounded font-medium transform hover:scale-105 transition">
@@ -51,9 +41,9 @@
                 </button>
               </div>
             </div>
-            <ul class="mt-2 list-disc list-inside text-white">
+            <ul class="mt-2 list-disc list-inside text-black">
               <li v-for="(opt, i) in quiz.options" :key="i">
-                {{ i + 1 }}. {{ opt }} <span v-if="i === quiz.answer" class="font-bold text-green-400">(Answer)</span>
+                {{ i + 1 }}. {{ opt }} <span v-if="i === quiz.answer" class="font-bold text-green-800">(Answer)</span>
               </li>
             </ul>
           </div>
@@ -67,6 +57,7 @@
   import { reactive, onMounted } from 'vue'
   import logo from '../assets/logo.png'
   import quizzesData from '../assets/quizzes.json'  // Import default quizzes
+  import Navbar from './Navbar.vue'
 
   const quizzes = reactive([])
 
