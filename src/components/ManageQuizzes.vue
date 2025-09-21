@@ -157,11 +157,12 @@ function openEditSetModal(set) {
     id: q.id,
     question: q.question,
     options: [...q.options],
-    answer: Number(q.answer) // ✅ Force number so <select> preselects correctly
+    answer: q.answer   // <-- here
   }))
   editingSet.value = true
   modalOpen.value = true
 }
+
 
 
 
