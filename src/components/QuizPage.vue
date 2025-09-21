@@ -23,34 +23,48 @@
           Time Left: {{ timeLeft }}s
         </div>
 
-
         <!-- No quiz -->
         <div v-if="!quizList.length" class="text-red-300 text-lg">No questions available for this set.</div>
 
         <!-- Quiz Questions -->
         <form v-else @submit.prevent="submitQuiz(false)" class="w-full max-w-3xl space-y-6">
-          <div v-for="(quiz, index) in quizList" :key="quiz.id" class="p-6 bg-gradient-to-r from-gray-200 to-gray-600 bg-opacity-20 backdrop-blur-md rounded-xl shadow">
+          <div
+            v-for="(quiz, index) in quizList"
+            :key="index"
+            class="p-6 bg-gradient-to-r from-gray-200 to-gray-600 bg-opacity-20 backdrop-blur-md rounded-xl shadow"
+          >
             <p class="font-semibold text-black text-lg">{{ index + 1 }}. {{ quiz.question }}</p>
             <div class="mt-3 space-y-2">
-              <label v-for="(option, i) in quiz.options" :key="i" class="flex items-center space-x-3 cursor-pointer text-black">
+              <label
+                v-for="(option, i) in quiz.options"
+                :key="i"
+                class="flex items-center space-x-3 cursor-pointer text-black"
+              >
                 <input
                   type="radio"
                   :name="'question'+index"
                   :value="i"
-                  v-model="answers[index]"
+                  v-model.number="answers[index]"   <!-- ✅ number modifier -->
                   class="w-5 h-5 accent-indigo-500"
                 />
                 <span>{{ option }}</span>
               </label>
             </div>
           </div>
-          <button :disabled="nameModalOpen || resultModalOpen" type="submit" class="w-full bg-gray-500 hover:bg-black text-white py-3 rounded-xl text-lg font-semibold shadow disabled:opacity-60">
+          <button
+            :disabled="nameModalOpen || resultModalOpen"
+            type="submit"
+            class="w-full bg-gray-500 hover:bg-black text-white py-3 rounded-xl text-lg font-semibold shadow disabled:opacity-60"
+          >
             Submit Quiz
           </button>
         </form>
 
         <!-- Name Modal -->
-        <div v-if="nameModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div
+          v-if="nameModalOpen"
+          class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+        >
           <div class="bg-white rounded-2xl p-6 w-11/12 max-w-sm">
             <h3 class="text-lg font-bold mb-3">Enter your name</h3>
             <input v-model="participantName" type="text" placeholder="Your name" class="w-full p-3 border rounded mb-4"/>
@@ -86,33 +100,27 @@ import quizzesData from '../assets/quizzes.json'
 
 const router = useRouter()
 const route = useRoute()
-
-// Get setId from route params
 const setId = parseInt(route.params.setId)
 
-// Load from localStorage first, fallback to quizzesData
 const storedSets = JSON.parse(localStorage.getItem('quizSets')) || quizzesData
 const currentSet = storedSets.find(s => s.id === setId) || { name: 'Unknown Set', questions: [] }
 
 const quizList = reactive([...currentSet.questions])
-const answers = reactive({}) // stores selected option index for each question
+const answers = reactive({})
 const total = ref(quizList.length)
 const score = ref(0)
 const skipped = ref(0)
 
-// name & modal states
 const participantName = ref('')
 const nameModalOpen = ref(false)
 const resultModalOpen = ref(false)
 
-// timer
 const timeLeft = ref(75)
 let timerInterval = null
 
 onMounted(() => {
   if (quizList.length) startTimer()
 })
-
 onBeforeUnmount(() => clearInterval(timerInterval))
 
 function startTimer() {
@@ -134,8 +142,8 @@ function computeScoreAndSkipped() {
     if (answers[i] === undefined) {
       tempSkipped++
     } else {
-      const selectedOption = q.options[answers[i]] // ✅ convert index to option text
-      if (selectedOption === q.answer) tempScore++
+      const selectedText = q.options[answers[i]]  // ✅ map index to option text
+      if (selectedText === q.answer) tempScore++
     }
   })
   score.value = tempScore
@@ -179,4 +187,3 @@ function closeResultModal() {
   router.push('/')
 }
 </script>
-
