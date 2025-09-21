@@ -1,76 +1,75 @@
 <template>
   <div class="min-h-screen bg-gradient-to-r from-gray-100 to-gray-300">
-    <!-- Navbar -->
     <Navbar />
-
     <div class="flex items-start">
-      <!-- Sidebar -->
-      <aside
-        class="w-64 bg-gradient-to-r from-gray-100 to-gray-200 bg-opacity-20 backdrop-blur-md shadow-md p-6 hidden md:flex flex-col space-y-8"
-      >
+      <aside class="w-64 bg-gradient-to-r from-gray-100 to-gray-200 bg-opacity-20 backdrop-blur-md shadow-md p-6 hidden md:flex flex-col space-y-8">
         <router-link to="/" class="font-semibold text-black hover:text-gray-500">Dashboard</router-link>
-        <router-link to="/quiz" class="font-semibold text-black hover:text-gray-500">Take Quiz</router-link>
+        <router-link to="/quiz-sets" class="font-semibold text-black hover:text-gray-500">Take Quiz</router-link>
         <a @click.prevent="askSecretKey" class="font-semibold text-black hover:text-gray-500 cursor-pointer">Manage Quizzes</a>
         <router-link to="/records" class="font-semibold text-black hover:text-gray-500">Previous Records</router-link>
       </aside>
 
-      <!-- Main Content -->
       <main class="flex-1 p-6">
-        <h1 class="text-3xl md:text-4xl font-bold text-indigo-950 mb-8 drop-shadow-lg">Take Quiz</h1>
+        <h1 class="text-3xl md:text-4xl font-bold text-indigo-950 mb-4 drop-shadow-lg">
+          Quiz: {{ currentSet.name }}
+        </h1>
 
-        <div v-if="quizList.length === 0" class="text-red-300 text-lg">
-          No quizzes available. Please contact admin.
+        <!-- Timer -->
+        <div
+          v-if="quizList.length"
+          class="fixed top-4 right-4 z-50 px-4 py-2 bg-red-100 text-lg font-semibold rounded shadow"
+          :class="timeLeft <= 10 ? 'text-red-700 animate-pulse bg-red-200' : 'text-red-600 bg-red-100'"
+        >
+          Time Left: {{ timeLeft }}s
         </div>
 
-        <form v-else @submit.prevent="submitQuiz" class="w-full max-w-3xl space-y-6">
-          <transition-group name="slide-fade" tag="div">
-            <div
-              v-for="(quiz, index) in quizList"
-              :key="index"
-              class="p-6 bg-gradient-to-r from-gray-200 to-gray-600 bg-opacity-20 backdrop-blur-md rounded-xl shadow transition transform hover:scale-105 hover:shadow-2xl hover:from-gray-500 hover:to-gray-700 cursor-pointer"
-            >
-              <p class="font-semibold text-black text-lg">{{ index + 1 }}. {{ quiz.question }}</p>
-              <div class="mt-3 space-y-2">
-                <label
-                  v-for="(option, i) in quiz.options"
-                  :key="i"
-                  class="flex items-center space-x-3 cursor-pointer text-black"
-                >
-                  <input
-                    type="radio"
-                    :name="'question' + index"
-                    :value="option"
-                    v-model="answers[index]"
-                    required
-                    class="w-5 h-5 accent-indigo-500"
-                  />
-                  <span>{{ option }}</span>
-                </label>
-              </div>
-            </div>
-          </transition-group>
 
-          <button
-            type="submit"
-            class="w-full bg-gray-500 hover:bg-black text-white py-3 rounded-xl text-lg font-semibold shadow"
-          >
+        <!-- No quiz -->
+        <div v-if="!quizList.length" class="text-red-300 text-lg">No questions available for this set.</div>
+
+        <!-- Quiz Questions -->
+        <form v-else @submit.prevent="submitQuiz(false)" class="w-full max-w-3xl space-y-6">
+          <div v-for="(quiz, index) in quizList" :key="quiz.id" class="p-6 bg-gradient-to-r from-gray-200 to-gray-600 bg-opacity-20 backdrop-blur-md rounded-xl shadow">
+            <p class="font-semibold text-black text-lg">{{ index + 1 }}. {{ quiz.question }}</p>
+            <div class="mt-3 space-y-2">
+              <label v-for="(option, i) in quiz.options" :key="i" class="flex items-center space-x-3 cursor-pointer text-black">
+                <input
+                  type="radio"
+                  :name="'question'+index"
+                  :value="i"
+                  v-model="answers[index]"
+                  class="w-5 h-5 accent-indigo-500"
+                />
+                <span>{{ option }}</span>
+              </label>
+            </div>
+          </div>
+          <button :disabled="nameModalOpen || resultModalOpen" type="submit" class="w-full bg-gray-500 hover:bg-black text-white py-3 rounded-xl text-lg font-semibold shadow disabled:opacity-60">
             Submit Quiz
           </button>
         </form>
 
+        <!-- Name Modal -->
+        <div v-if="nameModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div class="bg-white rounded-2xl p-6 w-11/12 max-w-sm">
+            <h3 class="text-lg font-bold mb-3">Enter your name</h3>
+            <input v-model="participantName" type="text" placeholder="Your name" class="w-full p-3 border rounded mb-4"/>
+            <div class="flex gap-3">
+              <button @click="saveNameAndShowResult" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">Save</button>
+              <button @click="saveAnonymousAndShowResult" class="flex-1 bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">Save as Anonymous</button>
+            </div>
+          </div>
+        </div>
+
         <!-- Result Modal -->
         <transition name="fade">
-          <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div v-if="resultModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white rounded-2xl p-8 max-w-sm text-center shadow-2xl transform transition-all scale-95 animate-modal">
               <h2 class="text-2xl font-bold mb-4">Quiz Completed!</h2>
               <p class="text-lg mb-2">Name: <span class="font-semibold">{{ participantName }}</span></p>
-              <p class="text-lg mb-6">Score: <span class="font-semibold">{{ score }} / {{ total }}</span></p>
-              <button
-                @click="closeModal"
-                class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-2 rounded-xl font-semibold shadow"
-              >
-                Back to Dashboard
-              </button>
+              <p class="text-lg mb-2">Score: <span class="font-semibold">{{ score }} / {{ total }}</span></p>
+              <p class="text-lg text-gray-600 mb-6">Skipped: <span class="font-semibold">{{ skipped }}</span></p>
+              <button @click="closeResultModal" class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-2 rounded-xl font-semibold shadow">Back to Dashboard</button>
             </div>
           </div>
         </transition>
@@ -80,101 +79,99 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import Navbar from './Navbar.vue'
 import quizzesData from '../assets/quizzes.json'
-import { askSecretKey } from '../utils/adminKey'
 
 const router = useRouter()
+const route = useRoute()
 
-// Make quizzes reactive
-const quizList = reactive([...quizzesData])
+// Get setId from route params
+const setId = parseInt(route.params.setId)
+
+// Load from localStorage first, fallback to quizzesData
+const storedSets = JSON.parse(localStorage.getItem('quizSets')) || quizzesData
+const currentSet = storedSets.find(s => s.id === setId) || { name: 'Unknown Set', questions: [] }
+
+const quizList = reactive([...currentSet.questions])
 const answers = reactive({})
-const showModal = ref(false)
-const participantName = ref('')
+const total = ref(quizList.length)
 const score = ref(0)
-const total = ref(0)
+const skipped = ref(0)
 
-function submitQuiz() {
+// name & modal states
+const participantName = ref('')
+const nameModalOpen = ref(false)
+const resultModalOpen = ref(false)
+
+// timer
+const timeLeft = ref(75)
+let timerInterval = null
+
+onMounted(() => {
+  if (quizList.length) startTimer()
+})
+
+onBeforeUnmount(() => clearInterval(timerInterval))
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    if (timeLeft.value > 0) timeLeft.value--
+    else {
+      clearInterval(timerInterval)
+      computeScoreAndSkipped()
+      participantName.value = 'Anonymous'
+      nameModalOpen.value = true
+    }
+  }, 1000)
+}
+
+function computeScoreAndSkipped() {
   let tempScore = 0
+  let tempSkipped = 0
   quizList.forEach((q, i) => {
-    if (answers[i] === q.answer) tempScore++
+    if (answers[i] === undefined) tempSkipped++
+    else if (answers[i] === q.answer) tempScore++
   })
-
-  const name = prompt('Enter your name:')
-  if (!name) return alert('Name is required!')
-
-  participantName.value = name
   score.value = tempScore
-  total.value = quizList.length
+  skipped.value = tempSkipped
+}
 
-  // Optional: store results locally
+function submitQuiz(auto=false) {
+  clearInterval(timerInterval)
+  computeScoreAndSkipped()
+  if (!auto) participantName.value = ''
+  nameModalOpen.value = true
+}
+
+function saveNameAndShowResult() {
+  participantName.value = participantName.value.trim() || 'Anonymous'
+  persistResultAndShow()
+}
+
+function saveAnonymousAndShowResult() {
+  participantName.value = 'Anonymous'
+  persistResultAndShow()
+}
+
+function persistResultAndShow() {
   const storedResults = JSON.parse(localStorage.getItem('quizResults')) || []
   storedResults.push({
-    name,
+    name: participantName.value,
     date: new Date().toISOString().split('T')[0],
-    score: tempScore,
-    total: quizList.length
+    score: score.value,
+    total: total.value,
+    skipped: skipped.value,
+    setId: currentSet.id
   })
   localStorage.setItem('quizResults', JSON.stringify(storedResults))
-
-  showModal.value = true
+  nameModalOpen.value = false
+  resultModalOpen.value = true
 }
 
-function closeModal() {
-  showModal.value = false
-  router.push('/')
-}
-
-function goDashboard() {
+function closeResultModal() {
+  resultModalOpen.value = false
   router.push('/')
 }
 </script>
-
-<style>
-/* Fade transition for modal */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-/* Card slide-fade animation */
-.slide-fade-enter-active {
-  transition: all 0.5s ease;
-}
-.slide-fade-leave-active {
-  transition: all 0.3s ease;
-}
-.slide-fade-enter-from {
-  opacity: 0;
-  transform: translateY(20px);
-}
-.slide-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-
-/* Modal pop animation */
-@keyframes modal-pop {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.05);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-.animate-modal {
-  animation: modal-pop 0.4s ease-out forwards;
-}
-</style>

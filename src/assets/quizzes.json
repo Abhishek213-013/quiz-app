@@ -1,82 +1,112 @@
 [
   {
-    "question": "2 + 2 = ?",
-    "options": ["3", "4", "5", "1"],
-    "answer": "4"
+    "id": 1,
+    "title": "Set 1: General Knowledge",
+    "questions": [
+      { "question": "2 + 2 = ?", "options": ["3","4","5","1"], "answer": "4" },
+      { "question": "Capital of France?", "options": ["London","Paris","Munich","Rome"], "answer": "Paris" },
+      { "question": "Vue.js is a ?", "options": ["Library","Framework","Language","Tool"], "answer": "Library" },
+      { "question": "What is the capital of Portugal?", "options": ["Paris","London","Berlin","Lisbon"], "answer": "Lisbon" },
+      { "question": "Who wrote 'Romeo and Juliet'?", "options": ["Shakespeare","Tolstoy","Hemingway","Orwell"], "answer": "Shakespeare" },
+      { "question": "What is 7 x 8?", "options": ["54","56","64","49"], "answer": "56" },
+      { "question": "Which planet is known as the Red Planet?", "options": ["Earth","Venus","Mars","Jupiter"], "answer": "Mars" },
+      { "question": "What is the largest mammal?", "options": ["Elephant","Blue Whale","Giraffe","Hippo"], "answer": "Blue Whale" },
+      { "question": "Which language runs in a web browser?", "options": ["Python","Java","C#","JavaScript"], "answer": "JavaScript" },
+      { "question": "What is the boiling point of water?", "options": ["100°C","90°C","80°C","120°C"], "answer": "100°C" },
+      { "question": "Who painted the Mona Lisa?", "options": ["Van Gogh","Da Vinci","Picasso","Michelangelo"], "answer": "Da Vinci" },
+      { "question": "Which gas do plants absorb?", "options": ["Oxygen","Nitrogen","Hydrogen","Carbon Dioxide"], "answer": "Carbon Dioxide" },
+      { "question": "Which country is famous for sushi?", "options": ["China","Japan","Thailand","Korea"], "answer": "Japan" },
+      { "question": "Which element has the chemical symbol 'O'?", "options": ["Oxygen","Gold","Silver","Iron"], "answer": "Oxygen" },
+      { "question": "What is the fastest land animal?", "options": ["Cheetah","Lion","Tiger","Horse"], "answer": "Cheetah" },
+      { "question": "Who is the current President of America?", "options": ["Barrack Obama","Osama Bin Laden","Donald Trump","George Bush"], "answer": "Donald Trump" }
+    ]
   },
   {
-    "question": "Capital of France?",
-    "options": ["London", "Paris", "Munich", "Rome"],
-    "answer": "Paris"
+    "id": 2,
+    "title": "Set 2: Science & Technology",
+    "questions": [
+      { "question": "Water chemical formula?", "options": ["H2O","CO2","NaCl","O2"], "answer": "H2O" },
+      { "question": "Speed of light approx?", "options": ["3x10^8 m/s","3x10^6 m/s","3x10^5 m/s","3x10^7 m/s"], "answer": "3x10^8 m/s" },
+      { "question": "JS stands for?", "options": ["JavaScript","JavaStandard","JScript","JustScript"], "answer": "JavaScript" },
+      { "question": "Boiling point of water?", "options": ["100°C","90°C","110°C","80°C"], "answer": "100°C" },
+      { "question": "Which planet has rings?", "options": ["Saturn","Mars","Earth","Venus"], "answer": "Saturn" },
+      { "question": "Atom consists of?", "options": ["Protons, Neutrons, Electrons","Protons only","Neutrons only","Electrons only"], "answer": "Protons, Neutrons, Electrons" },
+      { "question": "Most abundant gas in air?", "options": ["Nitrogen","Oxygen","Hydrogen","CO2"], "answer": "Nitrogen" },
+      { "question": "Which is a mammal?", "options": ["Dolphin","Shark","Tuna","Octopus"], "answer": "Dolphin" },
+      { "question": "Light year measures?", "options": ["Distance","Time","Speed","Energy"], "answer": "Distance" },
+      { "question": "Newton discovered?", "options": ["Gravity","Electricity","Evolution","Magnetism"], "answer": "Gravity" },
+      { "question": "Most abundant element in universe?", "options": ["Hydrogen","Helium","Oxygen","Carbon"], "answer": "Hydrogen" },
+      { "question": "Unit of force?", "options": ["Newton","Watt","Joule","Pascal"], "answer": "Newton" },
+      { "question": "Electric current unit?", "options": ["Ampere","Volt","Ohm","Tesla"], "answer": "Ampere" },
+      { "question": "Which is an insulator?", "options": ["Rubber","Copper","Aluminium","Iron"], "answer": "Rubber" },
+      { "question": "Which is a conductor?", "options": ["Copper","Rubber","Wood","Plastic"], "answer": "Copper" },
+      { "question": "What is pH of pure water?", "options": ["7","6","8","5"], "answer": "7" }
+    ]
   },
   {
-    "question": "Vue.js is a ?",
-    "options": ["Library", "Framework", "Language", "Tool"],
-    "answer": "Library"
+    "id": 3,
+    "title": "Set 3: History & Geography",
+    "questions": [
+      { "question": "First President of USA?", "options": ["George Washington","Lincoln","Obama","Trump"], "answer": "George Washington" },
+      { "question": "Year WW2 ended?", "options": ["1945","1939","1918","1965"], "answer": "1945" },
+      { "question": "Capital of Germany?", "options": ["Berlin","Munich","Frankfurt","Hamburg"], "answer": "Berlin" },
+      { "question": "Longest river in the world?", "options": ["Nile","Amazon","Ganga","Yangtze"], "answer": "Nile" },
+      { "question": "Which empire built pyramids?", "options": ["Egyptian","Roman","Greek","Persian"], "answer": "Egyptian" },
+      { "question": "First man on Moon?", "options": ["Neil Armstrong","Buzz Aldrin","Yuri Gagarin","Michael Collins"], "answer": "Neil Armstrong" },
+      { "question": "Largest desert?", "options": ["Sahara","Gobi","Kalahari","Arabian"], "answer": "Sahara" },
+      { "question": "Which continent is India in?", "options": ["Asia","Europe","Africa","Australia"], "answer": "Asia" },
+      { "question": "Who discovered America?", "options": ["Columbus","Magellan","Vespucci","Cook"], "answer": "Columbus" },
+      { "question": "Capital of Japan?", "options": ["Tokyo","Kyoto","Osaka","Hiroshima"], "answer": "Tokyo" },
+      { "question": "Which city is called Big Apple?", "options": ["New York","Chicago","Los Angeles","Boston"], "answer": "New York" },
+      { "question": "Famous Wall in China?", "options": ["Great Wall","Berlin Wall","Hadrian Wall","Wailing Wall"], "answer": "Great Wall" },
+      { "question": "Who was Cleopatra?", "options": ["Egyptian Queen","Roman Queen","Greek Queen","Persian Queen"], "answer": "Egyptian Queen" },
+      { "question": "Capital of Russia?", "options": ["Moscow","St Petersburg","Kazan","Sochi"], "answer": "Moscow" },
+      { "question": "Where is Mount Everest?", "options": ["Nepal","China","India","Bhutan"], "answer": "Nepal" },
+      { "question": "Which river flows through Paris?", "options": ["Seine","Thames","Danube","Ganges"], "answer": "Seine" }
+    ]
   },
   {
-    "question": "What is the capital of Portugal?",
-    "options": ["Paris", "London", "Berlin", "Lisbon"],
-    "answer": "Lisbon"
+    "id": 4,
+    "title": "Set 4: Literature & Arts",
+    "questions": [
+      { "question": "Author of Hamlet?", "options": ["Shakespeare","Tolstoy","Hemingway","Orwell"], "answer": "Shakespeare" },
+      { "question": "Who wrote 'War and Peace'?", "options": ["Shakespeare","Tolstoy","Hemingway","Orwell"], "answer": "Tolstoy" },
+      { "question": "Famous surrealist painter?", "options": ["Dali","Picasso","Van Gogh","Monet"], "answer": "Dali" },
+      { "question": "Famous novel '1984' by?", "options": ["Orwell","Huxley","Tolkien","Rowling"], "answer": "Orwell" },
+      { "question": "Poet of 'The Raven'?", "options": ["Poe","Byron","Keats","Shelley"], "answer": "Poe" },
+      { "question": "Which art uses watercolors?", "options": ["Painting","Sculpture","Photography","Digital"], "answer": "Painting" },
+      { "question": "Famous playwright?", "options": ["Shakespeare","Moliere","Sophocles","Chekhov"], "answer": "Shakespeare" },
+      { "question": "Who wrote 'The Odyssey'?", "options": ["Homer","Virgil","Sophocles","Aristotle"], "answer": "Homer" },
+      { "question": "Famous composer of 9th symphony?", "options": ["Beethoven","Mozart","Bach","Chopin"], "answer": "Beethoven" },
+      { "question": "Which artist painted Starry Night?", "options": ["Van Gogh","Picasso","Dali","Monet"], "answer": "Van Gogh" },
+      { "question": "Famous poet of India?", "options": ["Tagore","Nehru","Gandhi","Ambedkar"], "answer": "Tagore" },
+      { "question": "Which novel is by Jane Austen?", "options": ["Pride and Prejudice","1984","Jane Eyre","Wuthering Heights"], "answer": "Pride and Prejudice" },
+      { "question": "Famous sculptor of David?", "options": ["Michelangelo","Donatello","Bernini","Rodin"], "answer": "Michelangelo" },
+      { "question": "Who wrote 'Macbeth'?", "options": ["Shakespeare","Tolstoy","Orwell","Hemingway"], "answer": "Shakespeare" },
+      { "question": "Which Indian epic has Rama?", "options": ["Ramayana","Mahabharata","Bhagavad Gita","Upanishads"], "answer": "Ramayana" },
+      { "question": "Which epic features Arjuna?", "options": ["Mahabharata","Ramayana","Bhagavad Gita","Upanishads"], "answer": "Mahabharata" }
+    ]
   },
   {
-    "question": "Who wrote 'Romeo and Juliet'?",
-    "options": ["Shakespeare", "Tolstoy", "Hemingway", "Orwell"],
-    "answer": "Shakespeare"
-  },
-  {
-    "question": "What is 7 x 8?",
-    "options": ["54", "56", "64", "49"],
-    "answer": "56"
-  },
-  {
-    "question": "Which planet is known as the Red Planet?",
-    "options": ["Earth", "Venus", "Mars", "Jupiter"],
-    "answer": "Mars"
-  },
-  {
-    "question": "What is the largest mammal?",
-    "options": ["Elephant", "Blue Whale", "Giraffe", "Hippo"],
-    "answer": "Blue Whale"
-  },
-  {
-    "question": "Which language runs in a web browser?",
-    "options": ["Python", "Java", "C#", "JavaScript"],
-    "answer": "JavaScript"
-  },
-  {
-    "question": "What is the boiling point of water?",
-    "options": ["100°C", "90°C", "80°C", "120°C"],
-    "answer": "100°C"
-  },
-  {
-    "question": "Who painted the Mona Lisa?",
-    "options": ["Van Gogh", "Da Vinci", "Picasso", "Michelangelo"],
-    "answer": "Da Vinci"
-  },
-  {
-    "question": "Which gas do plants absorb?",
-    "options": ["Oxygen", "Nitrogen", "Hydrogen", "Carbon Dioxide"],
-    "answer": "Carbon Dioxide"
-  },
-  {
-    "question": "Which country is famous for sushi?",
-    "options": ["China", "Japan", "Thailand", "Korea"],
-    "answer": "Japan"
-  },
-  {
-    "question": "Which element has the chemical symbol 'O'?",
-    "options": ["Oxygen", "Gold", "Silver", "Iron"],
-    "answer": "Oxygen"
-  },
-  {
-    "question": "What is the fastest land animal?",
-    "options": ["Cheetah", "Lion", "Tiger", "Horse"],
-    "answer": "Cheetah"
-  },
-  {
-    "question": "Who is the current President of America?",
-    "options": ["Barrack Obama", "Osama Bin Laden", "Donald Trump", "George Bush"],
-    "answer": "Donald Trump"
+    "id": 5,
+    "title": "Set 5: Mixed Trivia",
+    "questions": [
+      { "question": "Largest ocean?", "options": ["Atlantic","Pacific","Indian","Arctic"], "answer": "Pacific" },
+      { "question": "Which is a primary color?", "options": ["Red","Pink","Purple","Brown"], "answer": "Red" },
+      { "question": "What is 12/4?", "options": ["3","4","2","6"], "answer": "3" },
+      { "question": "Who invented telephone?", "options": ["Bell","Edison","Tesla","Newton"], "answer": "Bell" },
+      { "question": "Which is a gas?", "options": ["Oxygen","Water","Iron","Gold"], "answer": "Oxygen" },
+      { "question": "Which is not a planet?", "options": ["Mars","Venus","Pluto","Earth"], "answer": "Pluto" },
+      { "question": "Which animal is known as King of Jungle?", "options": ["Lion","Tiger","Elephant","Leopard"], "answer": "Lion" },
+      { "question": "Largest planet?", "options": ["Jupiter","Mars","Saturn","Earth"], "answer": "Jupiter" },
+      { "question": "Who wrote 'Hamlet'?", "options": ["Shakespeare","Tolstoy","Hemingway","Orwell"], "answer": "Shakespeare" },
+      { "question": "What is 9 + 10?", "options": ["19","20","21","18"], "answer": "19" },
+      { "question": "Which country is known as Land of Rising Sun?", "options": ["China","Japan","India","Thailand"], "answer": "Japan" },
+      { "question": "Which metal is liquid at room temp?", "options": ["Mercury","Gold","Iron","Silver"], "answer": "Mercury" },
+      { "question": "Largest desert?", "options": ["Sahara","Gobi","Kalahari","Arabian"], "answer": "Sahara" },
+      { "question": "Which language is used for Android?", "options": ["Java","Python","C#","C++"], "answer": "Java" },
+      { "question": "Who discovered gravity?", "options": ["Newton","Einstein","Galileo","Tesla"], "answer": "Newton" },
+      { "question": "Which continent has most countries?", "options": ["Africa","Asia","Europe","South America"], "answer": "Africa" }
+    ]
   }
 ]
