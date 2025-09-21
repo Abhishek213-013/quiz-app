@@ -71,66 +71,66 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import logo from '../assets/logo.png'
-import quizzesData from '../assets/quizzes.json' // Import quizzes JSON
+  import { reactive, ref } from 'vue'
+  import { useRouter } from 'vue-router'
+  import logo from '../assets/logo.png'
+  import quizzesData from '../assets/quizzes.json' // Import quizzes JSON
 
-const router = useRouter()
+  const router = useRouter()
 
-// Make quizzes reactive
-const quizList = reactive([...quizzesData])  
+  // Make quizzes reactive
+  const quizList = reactive([...quizzesData])  
 
-const answers = reactive({})
-const showModal = ref(false)
-const participantName = ref('')
-const score = ref(0)
-const total = ref(0)
+  const answers = reactive({})
+  const showModal = ref(false)
+  const participantName = ref('')
+  const score = ref(0)
+  const total = ref(0)
 
-// Secret key check
-function askSecretKey() {
-  const key = prompt("Enter Admin Key:")
-  if (key === "admin123") {
-    router.push('/manage')
-  } else {
-    alert("Incorrect key!")
+  // Secret key check
+  function askSecretKey() {
+    const key = prompt("Enter Admin Key:")
+    if (key === "abhishek_30") {
+      router.push('/manage')
+    } else {
+      alert("Incorrect key!")
+    }
   }
-}
 
-function submitQuiz() {
-  let tempScore = 0
-  quizList.forEach((q, i) => {
-    if (answers[i] === q.answer) tempScore++
-  })
+  function submitQuiz() {
+    let tempScore = 0
+    quizList.forEach((q, i) => {
+      if (answers[i] === q.answer) tempScore++
+    })
 
-  const name = prompt("Enter your name:")
-  if (!name) return alert("Name is required!")
+    const name = prompt("Enter your name:")
+    if (!name) return alert("Name is required!")
 
-  participantName.value = name
-  score.value = tempScore
-  total.value = quizList.length
+    participantName.value = name
+    score.value = tempScore
+    total.value = quizList.length
 
-  // Store results in localStorage (optional, browser only)
-  const storedResults = JSON.parse(localStorage.getItem('quizResults')) || []
-  storedResults.push({
-    name,
-    date: new Date().toISOString().split('T')[0],
-    score: tempScore,
-    total: quizList.length
-  })
-  localStorage.setItem('quizResults', JSON.stringify(storedResults))
+    // Store results in localStorage (optional, browser only)
+    const storedResults = JSON.parse(localStorage.getItem('quizResults')) || []
+    storedResults.push({
+      name,
+      date: new Date().toISOString().split('T')[0],
+      score: tempScore,
+      total: quizList.length
+    })
+    localStorage.setItem('quizResults', JSON.stringify(storedResults))
 
-  showModal.value = true
-}
+    showModal.value = true
+  }
 
-function closeModal() {
-  showModal.value = false
-  router.push('/')
-}
+  function closeModal() {
+    showModal.value = false
+    router.push('/')
+  }
 
-function goDashboard() {
-  router.push('/')
-}
+  function goDashboard() {
+    router.push('/')
+  }
 </script>
 
 <style>

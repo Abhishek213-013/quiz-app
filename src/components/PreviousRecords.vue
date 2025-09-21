@@ -60,55 +60,55 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import logo from '../assets/logo.png'
+  import { reactive, ref, onMounted } from 'vue'
+  import { useRouter } from 'vue-router'
+  import logo from '../assets/logo.png'
 
 
 
-const router = useRouter()
-const records = reactive([])
-const filteredRecords = reactive([])
+  const router = useRouter()
+  const records = reactive([])
+  const filteredRecords = reactive([])
 
-const filterName = ref('')
-const filterDate = ref('')
+  const filterName = ref('')
+  const filterDate = ref('')
 
-// Load stored records
-onMounted(() => {
-  const stored = JSON.parse(localStorage.getItem('quizResults')) || []
-  stored.forEach(r => records.push(r))
-  stored.forEach(r => filteredRecords.push(r))
-})
-
-// Secret key check for Manage Quizzes
-function askSecretKey() {
-  const key = prompt("Enter Admin Key:")
-  if (key === "admin123") {
-    router.push('/manage')
-  } else {
-    alert("Incorrect key!")
-  }
-}
-
-// Filter functions
-function applyFilters() {
-  filteredRecords.splice(0, filteredRecords.length)
-  records.forEach(r => {
-    const matchName = filterName.value ? r.name.toLowerCase().includes(filterName.value.toLowerCase()) : true
-    const matchDate = filterDate.value ? r.date === filterDate.value : true
-    if (matchName && matchDate) filteredRecords.push(r)
+  // Load stored records
+  onMounted(() => {
+    const stored = JSON.parse(localStorage.getItem('quizResults')) || []
+    stored.forEach(r => records.push(r))
+    stored.forEach(r => filteredRecords.push(r))
   })
-}
 
-function resetFilters() {
-  filterName.value = ''
-  filterDate.value = ''
-  filteredRecords.splice(0, filteredRecords.length)
-  records.forEach(r => filteredRecords.push(r))
-}
-function goDashboard() {
-  router.push('/')
-}
+  // Secret key check for Manage Quizzes
+  function askSecretKey() {
+    const key = prompt("Enter Admin Key:")
+    if (key === "abhishek_30") {
+      router.push('/manage')
+    } else {
+      alert("Incorrect key!")
+    }
+  }
+
+  // Filter functions
+  function applyFilters() {
+    filteredRecords.splice(0, filteredRecords.length)
+    records.forEach(r => {
+      const matchName = filterName.value ? r.name.toLowerCase().includes(filterName.value.toLowerCase()) : true
+      const matchDate = filterDate.value ? r.date === filterDate.value : true
+      if (matchName && matchDate) filteredRecords.push(r)
+    })
+  }
+
+  function resetFilters() {
+    filterName.value = ''
+    filterDate.value = ''
+    filteredRecords.splice(0, filteredRecords.length)
+    records.forEach(r => filteredRecords.push(r))
+  }
+  function goDashboard() {
+    router.push('/')
+  }
 
 </script>
 

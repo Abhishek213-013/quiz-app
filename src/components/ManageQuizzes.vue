@@ -64,65 +64,65 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue'
-import logo from '../assets/logo.png'
-import quizzesData from '../assets/quizzes.json'  // ✅ Import default quizzes
+  import { reactive, onMounted } from 'vue'
+  import logo from '../assets/logo.png'
+  import quizzesData from '../assets/quizzes.json'  // Import default quizzes
 
-const quizzes = reactive([])
+  const quizzes = reactive([])
 
-onMounted(() => {
-  const stored = JSON.parse(localStorage.getItem('quizzes'))
-  if (stored && stored.length > 0) {
-    quizzes.push(...stored)
-  } else {
-    quizzes.push(...quizzesData)  // ✅ Use quizzes.json if no local quizzes exist
-    saveQuizzes()                // ✅ Save them to localStorage so they persist
+  onMounted(() => {
+    const stored = JSON.parse(localStorage.getItem('quizzes'))
+    if (stored && stored.length > 0) {
+      quizzes.push(...stored)
+    } else {
+      quizzes.push(...quizzesData)  //  Use quizzes.json if no local quizzes exist
+      saveQuizzes()                //  Save them to localStorage so they persist
+    }
+  })
+
+  function saveQuizzes() {
+    localStorage.setItem('quizzes', JSON.stringify(quizzes))
   }
-})
 
-function saveQuizzes() {
-  localStorage.setItem('quizzes', JSON.stringify(quizzes))
-}
-
-function addQuiz() {
-  const question = prompt("Enter question:")
-  if (!question) return
-  const optionsStr = prompt("Enter options (comma separated):")
-  if (!optionsStr) return
-  const options = optionsStr.split(',').map(o => o.trim())
-  const answerIndex = parseInt(prompt(`Enter correct option index (0-${options.length - 1}):`))
-  if (isNaN(answerIndex) || answerIndex < 0 || answerIndex >= options.length) return alert("Invalid answer index!")
-  
-  quizzes.push({ id: Date.now(), question, options, answer: answerIndex })
-  saveQuizzes()
-}
-
-function editQuiz(index) {
-  const quiz = quizzes[index]
-  const question = prompt("Edit question:", quiz.question)
-  if (!question) return
-  const optionsStr = prompt("Edit options:", quiz.options.join(','))
-  if (!optionsStr) return
-  const options = optionsStr.split(',').map(o => o.trim())
-  const answerIndex = parseInt(prompt(`Edit correct option index (0-${options.length - 1}):`, quiz.answer))
-  if (isNaN(answerIndex) || answerIndex < 0 || answerIndex >= options.length) return alert("Invalid answer index!")
-  
-  quiz.question = question
-  quiz.options = options
-  quiz.answer = answerIndex
-  saveQuizzes()
-}
-
-function deleteQuiz(index) {
-  if (confirm("Are you sure?")) {
-    quizzes.splice(index, 1)
+  function addQuiz() {
+    const question = prompt("Enter question:")
+    if (!question) return
+    const optionsStr = prompt("Enter options (comma separated):")
+    if (!optionsStr) return
+    const options = optionsStr.split(',').map(o => o.trim())
+    const answerIndex = parseInt(prompt(`Enter correct option index (0-${options.length - 1}):`))
+    if (isNaN(answerIndex) || answerIndex < 0 || answerIndex >= options.length) return alert("Invalid answer index!")
+    
+    quizzes.push({ id: Date.now(), question, options, answer: answerIndex })
     saveQuizzes()
   }
-}
 
-function goDashboard() {
-  router.push('/')
-}
+  function editQuiz(index) {
+    const quiz = quizzes[index]
+    const question = prompt("Edit question:", quiz.question)
+    if (!question) return
+    const optionsStr = prompt("Edit options:", quiz.options.join(','))
+    if (!optionsStr) return
+    const options = optionsStr.split(',').map(o => o.trim())
+    const answerIndex = parseInt(prompt(`Edit correct option index (0-${options.length - 1}):`, quiz.answer))
+    if (isNaN(answerIndex) || answerIndex < 0 || answerIndex >= options.length) return alert("Invalid answer index!")
+    
+    quiz.question = question
+    quiz.options = options
+    quiz.answer = answerIndex
+    saveQuizzes()
+  }
+
+  function deleteQuiz(index) {
+    if (confirm("Are you sure?")) {
+      quizzes.splice(index, 1)
+      saveQuizzes()
+    }
+  }
+
+  function goDashboard() {
+    router.push('/')
+  }
 </script>
 
 

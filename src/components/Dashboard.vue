@@ -38,20 +38,20 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
-import logo from '../assets/logo.png'
+  import { useRouter } from 'vue-router'
+  import logo from '../assets/logo.png'
 
 
 
-const router = useRouter()
+  const router = useRouter()
 
-function askSecretKey() { 
-  const key = prompt("Enter Admin Key:")
-  if (key === null) return // Handle cancel
-  if (key === "admin123") { 
-    router.push('/manage') 
-  } else { 
-    alert("Incorrect key!") 
+  function askSecretKey() { 
+    const key = prompt("Enter Admin Key:")
+    if (key === null) return // Handle cancel
+    if (key === "abhishek_30") { 
+      router.push('/manage') 
+    } else { 
+      alert("Incorrect key!") 
+    } 
   } 
-} 
 </script>
