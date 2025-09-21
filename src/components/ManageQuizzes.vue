@@ -81,7 +81,7 @@
 
           <div class="mt-2">
             Correct Answer:
-            <select v-model="q.answer" class="border p-1 rounded">
+            <select v-model.number="q.answer" class="border p-1 rounded">
               <option v-for="(opt, i) in q.options" :key="i" :value="i">{{ i + 1 }}. {{ opt }}</option>
             </select>
           </div>
@@ -122,20 +122,27 @@ onMounted(() => {
   const stored = JSON.parse(localStorage.getItem('quizSets')) || []
 
   if (stored.length > 0) {
+    // Convert string answers to index for each question
+    stored.forEach(set => {
+      set.questions.forEach(q => {
+        const idx = q.options.findIndex(opt => opt === q.answer)
+        q.answer = idx >= 0 ? idx : 0
+      })
+    })
     quizSets.push(...stored)
   } else {
+    // Load default quizzes from quizzes.json
     quizzesData.forEach(set => {
       quizSets.push({
         id: set.id || Date.now() + Math.random(),
         title: set.title,
         questions: set.questions.map(q => {
-          // Convert string answer into index
           const answerIndex = q.options.findIndex(opt => opt === q.answer)
           return {
             id: q.id || Date.now() + Math.random(),
             question: q.question,
             options: [...q.options],
-            answer: answerIndex >= 0 ? answerIndex : 0 // fallback to first option if not found
+            answer: answerIndex >= 0 ? answerIndex : 0
           }
         })
       })
@@ -143,7 +150,6 @@ onMounted(() => {
     localStorage.setItem('quizSets', JSON.stringify(quizSets))
   }
 })
-
 
 // Open Add Set Modal
 function openAddSetModal() {
@@ -154,21 +160,22 @@ function openAddSetModal() {
   modalOpen.value = true
 }
 
+// Open Edit Set Modal
 function openEditSetModal(set) {
   currentSet.id = set.id
   currentSet.title = set.title
-  currentSet.questions = set.questions.map(q => ({
-    id: q.id,
-    question: q.question,
-    options: [...q.options],
-    answer: q.answer   // <-- here
-  }))
+  currentSet.questions = set.questions.map(q => {
+    const answerIndex = q.options.findIndex(opt => opt === q.answer)
+    return {
+      id: q.id,
+      question: q.question,
+      options: [...q.options],
+      answer: answerIndex >= 0 ? answerIndex : 0
+    }
+  })
   editingSet.value = true
   modalOpen.value = true
 }
-
-
-
 
 // Add new question
 function addQuestion() {
@@ -203,7 +210,7 @@ function saveSet() {
       id: q.id || Date.now() + Math.random(),
       question: q.question,
       options: [...q.options],
-      answer: Number(q.answer) // ✅ Always save as number
+      answer: q.answer // already index
     }))
   }
 
@@ -216,7 +223,6 @@ function saveSet() {
   localStorage.setItem('quizSets', JSON.stringify(quizSets))
   modalOpen.value = false
 }
-
 
 // Close modal
 function closeModal() {
