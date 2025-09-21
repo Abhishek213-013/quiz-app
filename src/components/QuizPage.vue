@@ -95,7 +95,7 @@ const storedSets = JSON.parse(localStorage.getItem('quizSets')) || quizzesData
 const currentSet = storedSets.find(s => s.id === setId) || { name: 'Unknown Set', questions: [] }
 
 const quizList = reactive([...currentSet.questions])
-const answers = reactive({})
+const answers = reactive({}) // stores selected option index for each question
 const total = ref(quizList.length)
 const score = ref(0)
 const skipped = ref(0)
@@ -131,14 +131,18 @@ function computeScoreAndSkipped() {
   let tempScore = 0
   let tempSkipped = 0
   quizList.forEach((q, i) => {
-    if (answers[i] === undefined) tempSkipped++
-    else if (answers[i] === q.answer) tempScore++
+    if (answers[i] === undefined) {
+      tempSkipped++
+    } else {
+      const selectedOption = q.options[answers[i]] // ✅ convert index to option text
+      if (selectedOption === q.answer) tempScore++
+    }
   })
   score.value = tempScore
   skipped.value = tempSkipped
 }
 
-function submitQuiz(auto=false) {
+function submitQuiz(auto = false) {
   clearInterval(timerInterval)
   computeScoreAndSkipped()
   if (!auto) participantName.value = ''
@@ -175,3 +179,4 @@ function closeResultModal() {
   router.push('/')
 }
 </script>
+
