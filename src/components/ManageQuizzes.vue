@@ -133,8 +133,7 @@ onMounted(() => {
           id: q.id || Date.now() + Math.random(),
           question: q.question,
           options: [...q.options],
-          // ✅ Ensure answer is always stored as number
-          answer: typeof q.answer === 'string' ? parseInt(q.answer, 10) : q.answer ?? 0
+          answer: q.answer
         }))
       })
     })
@@ -151,7 +150,6 @@ function openAddSetModal() {
   modalOpen.value = true
 }
 
-// Open Edit Set Modal
 function openEditSetModal(set) {
   currentSet.id = set.id
   currentSet.title = set.title
@@ -159,11 +157,13 @@ function openEditSetModal(set) {
     id: q.id,
     question: q.question,
     options: [...q.options],
-    answer: typeof q.answer === 'string' ? parseInt(q.answer, 10) : q.answer ?? 0
+    answer: Number(q.answer) // ✅ Force number so <select> preselects correctly
   }))
   editingSet.value = true
   modalOpen.value = true
 }
+
+
 
 // Add new question
 function addQuestion() {
@@ -198,8 +198,7 @@ function saveSet() {
       id: q.id || Date.now() + Math.random(),
       question: q.question,
       options: [...q.options],
-      // ✅ Store answer as number
-      answer: typeof q.answer === 'string' ? parseInt(q.answer, 10) : q.answer ?? 0
+      answer: Number(q.answer) // ✅ Always save as number
     }))
   }
 
@@ -213,9 +212,9 @@ function saveSet() {
   modalOpen.value = false
 }
 
+
 // Close modal
 function closeModal() {
   modalOpen.value = false
 }
 </script>
-
