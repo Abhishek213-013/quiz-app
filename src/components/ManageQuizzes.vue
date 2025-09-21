@@ -117,35 +117,34 @@ const modalOpen = ref(false)
 const editingSet = ref(false)
 const currentSet = reactive({ id: null, title: '', questions: [] })
 
-// Load sets from localStorage or quizzes.json
+// Normalize answer: convert string answer to index
+function normalizeQuizSet(set) {
+  return {
+    id: set.id,
+    title: set.title,
+    questions: set.questions.map(q => {
+      const answerIndex = q.options.findIndex(opt => opt === q.answer)
+      return {
+        id: q.id || Date.now() + Math.random(),
+        question: q.question,
+        options: [...q.options],
+        answer: answerIndex >= 0 ? answerIndex : 0
+      }
+    })
+  }
+}
+
+// Load sets
 onMounted(() => {
   const stored = JSON.parse(localStorage.getItem('quizSets')) || []
 
   if (stored.length > 0) {
-    // Convert string answers to index for each question
-    stored.forEach(set => {
-      set.questions.forEach(q => {
-        const idx = q.options.findIndex(opt => opt === q.answer)
-        q.answer = idx >= 0 ? idx : 0
-      })
+    stored.forEach(s => {
+      quizSets.push(normalizeQuizSet(s))
     })
-    quizSets.push(...stored)
   } else {
-    // Load default quizzes from quizzes.json
-    quizzesData.forEach(set => {
-      quizSets.push({
-        id: set.id || Date.now() + Math.random(),
-        title: set.title,
-        questions: set.questions.map(q => {
-          const answerIndex = q.options.findIndex(opt => opt === q.answer)
-          return {
-            id: q.id || Date.now() + Math.random(),
-            question: q.question,
-            options: [...q.options],
-            answer: answerIndex >= 0 ? answerIndex : 0
-          }
-        })
-      })
+    quizzesData.forEach(s => {
+      quizSets.push(normalizeQuizSet(s))
     })
     localStorage.setItem('quizSets', JSON.stringify(quizSets))
   }
@@ -164,15 +163,12 @@ function openAddSetModal() {
 function openEditSetModal(set) {
   currentSet.id = set.id
   currentSet.title = set.title
-  currentSet.questions = set.questions.map(q => {
-    const answerIndex = q.options.findIndex(opt => opt === q.answer)
-    return {
-      id: q.id,
-      question: q.question,
-      options: [...q.options],
-      answer: answerIndex >= 0 ? answerIndex : 0
-    }
-  })
+  currentSet.questions = set.questions.map(q => ({
+    id: q.id,
+    question: q.question,
+    options: [...q.options],
+    answer: q.answer
+  }))
   editingSet.value = true
   modalOpen.value = true
 }
@@ -210,7 +206,7 @@ function saveSet() {
       id: q.id || Date.now() + Math.random(),
       question: q.question,
       options: [...q.options],
-      answer: q.answer // already index
+      answer: q.answer
     }))
   }
 
