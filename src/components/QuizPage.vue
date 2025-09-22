@@ -102,9 +102,19 @@ const router = useRouter()
 const route = useRoute()
 const setId = parseInt(route.params.setId)
 
+// ✅ Always prefer localStorage if available, else fallback to quizzes.json
 const storedSets = JSON.parse(localStorage.getItem('quizSets')) || quizzesData
+
+// ✅ Get current set, making sure "questions" contains `answer`
 const currentSet = storedSets.find(s => s.id === setId) || { name: 'Unknown Set', questions: [] }
 
+// ✅ Ensure each question has `answer` properly loaded
+currentSet.questions = currentSet.questions.map(q => ({
+  ...q,
+  answer: q.answer ?? '' // fallback to empty string to prevent undefined
+}))
+
+// ✅ Reactive data
 const quizList = reactive([...currentSet.questions])
 const answers = reactive({})
 const total = ref(quizList.length)
@@ -142,7 +152,7 @@ function computeScoreAndSkipped() {
     if (answers[i] === undefined) {
       tempSkipped++
     } else {
-      const selectedText = q.options[answers[i]]  
+      const selectedText = q.options[answers[i]]
       if (selectedText === q.answer) tempScore++
     }
   })
@@ -187,3 +197,4 @@ function closeResultModal() {
   router.push('/')
 }
 </script>
+
