@@ -76,7 +76,8 @@
             @click="addOption(qIndex)"
             class="mt-1 text-green-600 font-bold px-2 py-1 border rounded hover:bg-green-100"
           >
-            + Option
+            <p>+ Option</p>
+
           </button>
 
           <div class="mt-2">
@@ -92,7 +93,8 @@
           @click="addQuestion"
           class="mb-4 mt-2 text-indigo-600 font-bold px-3 py-1 border rounded hover:bg-indigo-100"
         >
-          + Add Question
+          <p>+ Add Question</p>
+
         </button>
 
         <!-- Modal Actions -->

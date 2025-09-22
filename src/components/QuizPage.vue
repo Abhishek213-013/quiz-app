@@ -44,7 +44,7 @@
                   type="radio"
                   :name="'question'+index"
                   :value="i"
-                  v-model.number="answers[index]"   <!-- ✅ number modifier -->
+                  v-model.number="answers[index]"   
                   class="w-5 h-5 accent-indigo-500"
                 />
                 <span>{{ option }}</span>
@@ -142,7 +142,7 @@ function computeScoreAndSkipped() {
     if (answers[i] === undefined) {
       tempSkipped++
     } else {
-      const selectedText = q.options[answers[i]]  // ✅ map index to option text
+      const selectedText = q.options[answers[i]]  
       if (selectedText === q.answer) tempScore++
     }
   })
