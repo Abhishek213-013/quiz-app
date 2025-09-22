@@ -3,8 +3,16 @@
     <!-- Navbar -->
     <Navbar />
 
+    <!-- Mobile Sidebar Toggle -->
+    <button
+      class="md:hidden fixed top-4 left-4 z-50 bg-gray-200 p-2 rounded-lg shadow hover:bg-gray-300"
+      @click="mobileSidebarOpen = !mobileSidebarOpen"
+    >
+      ⇶
+    </button>
+
     <div class="flex items-start">
-      <!-- Sidebar -->
+      <!-- Sidebar (Desktop) -->
       <aside
         class="w-64 bg-gradient-to-r from-gray-100 to-gray-200 bg-opacity-20 backdrop-blur-md shadow-md p-6 hidden md:flex flex-col space-y-5"
       >
@@ -13,6 +21,20 @@
         <a @click.prevent="askSecretKey" class="font-semibold text-black hover:text-gray-500 cursor-pointer">Manage Quizzes</a>
         <router-link to="/records" class="font-semibold text-black hover:text-gray-500">Previous Records</router-link>
       </aside>
+
+      <!-- Sidebar (Mobile) -->
+      <transition name="slide">
+        <aside
+          v-if="mobileSidebarOpen"
+          class="fixed inset-y-0 left-0 w-64 bg-gradient-to-r from-gray-100 to-gray-200 p-6 shadow-lg flex flex-col space-y-6 z-40"
+        >
+          <button class="self-end text-gray-700 font-bold text-lg" @click="mobileSidebarOpen = false">✕</button>
+          <router-link @click="mobileSidebarOpen = false" to="/" class="font-semibold text-black hover:text-gray-500">Dashboard</router-link>
+          <router-link @click="mobileSidebarOpen = false" to="/quiz" class="font-semibold text-black hover:text-gray-500">Take Quiz</router-link>
+          <a @click.prevent="() => { askSecretKey(); mobileSidebarOpen = false }" class="font-semibold text-black hover:text-gray-500 cursor-pointer">Manage Quizzes</a>
+          <router-link @click="mobileSidebarOpen = false" to="/records" class="font-semibold text-black hover:text-gray-500">Previous Records</router-link>
+        </aside>
+      </transition>
 
       <!-- Main Content -->
       <main class="flex-1 p-6 md:pl-8">
@@ -57,7 +79,7 @@
           <div
             v-for="(record, index) in filteredRecords"
             :key="record.id || index"
-            class="p-6 bg-gradient-to-r from-gray-200 to-gray-600 bg-opacity-20 backdrop-blur-md rounded-xl shadow mb-4 transition transform  cursor-pointer"
+            class="p-6 bg-gradient-to-r from-gray-200 to-gray-600 bg-opacity-20 backdrop-blur-md rounded-xl shadow mb-4 transition transform cursor-pointer"
           >
             <p class="font-semibold text-black text-lg">{{ index + 1 }}. {{ record.name }}</p>
             <p class="text-black">Date: {{ record.date }}</p>
@@ -85,6 +107,9 @@ const router = useRouter()
 // Reactive lists
 const records = reactive([])
 const filteredRecords = reactive([])
+
+// Sidebar toggle state
+const mobileSidebarOpen = ref(false)
 
 // Filter inputs
 const filterName = ref('')
@@ -124,5 +149,16 @@ function goDashboard() {
 }
 </script>
 
-<style>
+<style scoped>
+/* Slide-in animation for mobile sidebar */
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.3s ease;
+}
+.slide-enter-from {
+  transform: translateX(-100%);
+}
+.slide-leave-to {
+  transform: translateX(-100%);
+}
 </style>
