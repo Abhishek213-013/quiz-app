@@ -30,7 +30,7 @@
         >
           <button class="self-end text-gray-700 font-bold text-lg" @click="mobileSidebarOpen = false">✕</button>
           <router-link @click="mobileSidebarOpen = false" to="/" class="font-semibold text-black hover:text-gray-500">Dashboard</router-link>
-          <router-link @click="mobileSidebarOpen = false" to="/quiz-sets" class="font-semibold text-black hover:text-gray-500">Take Quiz</router-link>
+          <router-link @click="mobileSidebarOpen = false" to="/quiz" class="font-semibold text-black hover:text-gray-500">Take Quiz</router-link>
           <a @click.prevent="() => { askSecretKey(); mobileSidebarOpen = false }" class="font-semibold text-black hover:text-gray-500 cursor-pointer">Manage Quizzes</a>
           <router-link @click="mobileSidebarOpen = false" to="/records" class="font-semibold text-black hover:text-gray-500">Previous Records</router-link>
         </aside>

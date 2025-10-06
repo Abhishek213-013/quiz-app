@@ -1,37 +1,13 @@
 <template>
   <div class="min-h-screen bg-gradient-to-r from-gray-100 to-gray-300">
     <Navbar />
-
-    <!-- Mobile Sidebar Toggle -->
-    <button
-      class="md:hidden fixed top-4 left-4 z-50 bg-gray-200 p-2 rounded-lg shadow hover:bg-gray-300"
-      @click="mobileSidebarOpen = !mobileSidebarOpen"
-    >
-      ⇶
-    </button>
-
     <div class="flex items-start">
-      <!-- Sidebar (Desktop) -->
       <aside class="w-64 bg-gradient-to-r from-gray-100 to-gray-200 bg-opacity-20 backdrop-blur-md shadow-md p-6 hidden md:flex flex-col space-y-8">
         <router-link to="/" class="font-semibold text-black hover:text-gray-500">Dashboard</router-link>
         <router-link to="/quiz-sets" class="font-semibold text-black hover:text-gray-500">Take Quiz</router-link>
         <a @click.prevent="askSecretKey" class="font-semibold text-black hover:text-gray-500 cursor-pointer">Manage Quizzes</a>
         <router-link to="/records" class="font-semibold text-black hover:text-gray-500">Previous Records</router-link>
       </aside>
-
-      <!-- Sidebar (Mobile) -->
-      <transition name="slide">
-        <aside
-          v-if="mobileSidebarOpen"
-          class="fixed inset-y-0 left-0 w-64 bg-gradient-to-r from-gray-100 to-gray-200 p-6 shadow-lg flex flex-col space-y-6 z-40"
-        >
-          <button class="self-end text-gray-700 font-bold text-lg" @click="mobileSidebarOpen = false">✕</button>
-          <router-link @click="mobileSidebarOpen = false" to="/" class="font-semibold text-black hover:text-gray-500">Dashboard</router-link>
-          <router-link @click="mobileSidebarOpen = false" to="/quiz-sets" class="font-semibold text-black hover:text-gray-500">Take Quiz</router-link>
-          <a @click.prevent="() => { askSecretKey(); mobileSidebarOpen = false }" class="font-semibold text-black hover:text-gray-500 cursor-pointer">Manage Quizzes</a>
-          <router-link @click="mobileSidebarOpen = false" to="/records" class="font-semibold text-black hover:text-gray-500">Previous Records</router-link>
-        </aside>
-      </transition>
 
       <main class="flex-1 p-6">
         <h1 class="text-3xl md:text-4xl font-bold text-indigo-950 mb-4 drop-shadow-lg">
@@ -125,10 +101,22 @@ import quizzesData from '../assets/quizzes.json'
 const router = useRouter()
 const route = useRoute()
 const setId = parseInt(route.params.setId)
-const storedSets = JSON.parse(localStorage.getItem('quizSets')) || quizzesData
-const currentSet = storedSets.find(s => s.id === setId) || { name: 'Unknown Set', questions: [] }
-currentSet.questions = currentSet.questions.map(q => ({ ...q, answer: q.answer ?? '' }))
 
+// ✅ Always prefer localStorage if available, else fallback to quizzes.json
+const storedSets = JSON.parse(localStorage.getItem('quizSets')) || quizzesData
+
+// ✅ Get current set, making sure "questions" contains `answer`
+const currentSet = storedSets.find(s => s.id === setId) || { name: 'Unknown Set', questions: [] }
+console.log("Loaded Quiz Set:", currentSet);
+
+
+// ✅ Ensure each question has `answer` properly loaded
+currentSet.questions = currentSet.questions.map(q => ({
+  ...q,
+  answer: q.answer ?? '' // fallback to empty string to prevent undefined
+}))
+
+// ✅ Reactive data
 const quizList = reactive([...currentSet.questions])
 const answers = reactive({})
 const total = ref(quizList.length)
@@ -138,9 +126,8 @@ const skipped = ref(0)
 const participantName = ref('')
 const nameModalOpen = ref(false)
 const resultModalOpen = ref(false)
-const mobileSidebarOpen = ref(false)
 
-const timeLeft = ref(60)
+const timeLeft = ref(75)
 let timerInterval = null
 
 onMounted(() => {
@@ -160,37 +147,27 @@ function startTimer() {
   }, 1000)
 }
 
-const answers = ref([]) // ✅ make it an array
-
 function computeScoreAndSkipped() {
   let tempScore = 0
   let tempSkipped = 0
 
   quizList.forEach((q, i) => {
-    const ansIndex = answers[i]
-
-    if (ansIndex === undefined) {
+    if (answers[i] === undefined) {
       tempSkipped++
-      return
-    }
+    } else {
+      const selectedText = q.options[answers[i]].trim().toLowerCase()
+      const correctAnswer =
+        typeof q.answer === 'number'
+          ? q.options[q.answer].trim().toLowerCase()
+          : q.answer.trim().toLowerCase()
 
-    const selectedOption = q.options?.[ansIndex]?.trim().toLowerCase()
-    const correctAnswer = String(q.answer).trim().toLowerCase()
-
-    // Handles both text or index based answers
-    if (
-      selectedOption === correctAnswer || 
-      ansIndex === Number(q.answer)
-    ) {
-      tempScore++
+      if (selectedText === correctAnswer) tempScore++
     }
   })
 
   score.value = tempScore
   skipped.value = tempSkipped
 }
-
-
 
 
 function submitQuiz(auto = false) {
@@ -231,16 +208,5 @@ function closeResultModal() {
 }
 </script>
 
-<style scoped>
-/* Simple slide-in animation for sidebar */
-.slide-enter-active,
-.slide-leave-active {
-  transition: transform 0.3s ease;
-}
-.slide-enter-from {
-  transform: translateX(-100%);
-}
-.slide-leave-to {
-  transform: translateX(-100%);
-}
-</style>
+
+
