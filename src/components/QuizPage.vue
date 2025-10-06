@@ -140,7 +140,7 @@ const nameModalOpen = ref(false)
 const resultModalOpen = ref(false)
 const mobileSidebarOpen = ref(false)
 
-const timeLeft = ref(75)
+const timeLeft = ref(60)
 let timerInterval = null
 
 onMounted(() => {
@@ -163,13 +163,21 @@ function startTimer() {
 function computeScoreAndSkipped() {
   let tempScore = 0
   let tempSkipped = 0
+
   quizList.forEach((q, i) => {
-    if (answers[i] === undefined) tempSkipped++
-    else if (q.options[answers[i]] === q.answer) tempScore++
+    const ansIndex = answers[i]
+
+    if (ansIndex === undefined) {
+      tempSkipped++
+    } else if (q.options?.[ansIndex] === q.answer) {
+      tempScore++
+    }
   })
+
   score.value = tempScore
   skipped.value = tempSkipped
 }
+
 
 function submitQuiz(auto = false) {
   clearInterval(timerInterval)
