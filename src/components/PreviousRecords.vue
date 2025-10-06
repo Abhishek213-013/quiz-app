@@ -31,7 +31,12 @@
           <button class="self-end text-gray-700 font-bold text-lg" @click="mobileSidebarOpen = false">✕</button>
           <router-link @click="mobileSidebarOpen = false" to="/" class="font-semibold text-black hover:text-gray-500">Dashboard</router-link>
           <router-link @click="mobileSidebarOpen = false" to="/quiz" class="font-semibold text-black hover:text-gray-500">Take Quiz</router-link>
-          <a @click.prevent="() => { askSecretKey(); mobileSidebarOpen = false }" class="font-semibold text-black hover:text-gray-500 cursor-pointer">Manage Quizzes</a>
+          <a
+            @click.prevent="() => { askSecretKey(); mobileSidebarOpen = false }"
+            class="font-semibold text-black hover:text-gray-500 cursor-pointer"
+          >
+            Manage Quizzes
+          </a>
           <router-link @click="mobileSidebarOpen = false" to="/records" class="font-semibold text-black hover:text-gray-500">Previous Records</router-link>
         </aside>
       </transition>
@@ -104,36 +109,49 @@ import { askSecretKey } from '../utils/adminKey'
 
 const router = useRouter()
 
-// Reactive lists
 const records = reactive([])
 const filteredRecords = reactive([])
-
-// Sidebar toggle state
 const mobileSidebarOpen = ref(false)
 
-// Filter inputs
 const filterName = ref('')
 const filterDate = ref('')
 const filterSetId = ref('')
 
-// Load stored records from localStorage
+// Load stored records
 onMounted(() => {
   const stored = JSON.parse(localStorage.getItem('quizResults')) || []
+
+  // Sort safely — newest first
+  stored.sort((a, b) => {
+    const da = Date.parse(a.date) || 0
+    const db = Date.parse(b.date) || 0
+    return db - da
+  })
+
   stored.forEach(r => records.push(r))
   stored.forEach(r => filteredRecords.push(r))
 })
 
-// Filter functions
+// Filter logic
 function applyFilters() {
   filteredRecords.splice(0, filteredRecords.length)
-  records.forEach(r => {
+  const filtered = records.filter(r => {
     const matchName = filterName.value
       ? r.name.toLowerCase().includes(filterName.value.toLowerCase())
       : true
-    const matchDate = filterDate.value ? r.date === filterDate.value : true
-    const matchSetId = filterSetId.value ? r.setId === filterSetId.value : true
-    if (matchName && matchDate && matchSetId) filteredRecords.push(r)
+    const matchDate = filterDate.value ? r.date.includes(filterDate.value) : true
+    const matchSetId = filterSetId.value ? r.setId == filterSetId.value : true
+    return matchName && matchDate && matchSetId
   })
+
+  // Sort filtered by newest first
+  filtered.sort((a, b) => {
+    const da = Date.parse(a.date) || 0
+    const db = Date.parse(b.date) || 0
+    return db - da
+  })
+
+  filtered.forEach(r => filteredRecords.push(r))
 }
 
 function resetFilters() {
@@ -143,14 +161,9 @@ function resetFilters() {
   filteredRecords.splice(0, filteredRecords.length)
   records.forEach(r => filteredRecords.push(r))
 }
-
-function goDashboard() {
-  router.push('/')
-}
 </script>
 
 <style scoped>
-/* Slide-in animation for mobile sidebar */
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 0.3s ease;

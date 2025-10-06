@@ -127,7 +127,7 @@ const participantName = ref('')
 const nameModalOpen = ref(false)
 const resultModalOpen = ref(false)
 
-const timeLeft = ref(75)
+const timeLeft = ref(60)
 let timerInterval = null
 
 onMounted(() => {
