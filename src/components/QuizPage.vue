@@ -68,7 +68,7 @@
                   type="radio"
                   :name="'question'+index"
                   :value="i"
-                  v-model.number="answers[index]"   
+                  v-model.number="answers.value[index]"  <!-- ✅ Correct binding -->
                   class="w-5 h-5 accent-indigo-500"
                 />
                 <span>{{ option }}</span>
@@ -130,7 +130,7 @@ const currentSet = storedSets.find(s => s.id === setId) || { name: 'Unknown Set'
 currentSet.questions = currentSet.questions.map(q => ({ ...q, answer: q.answer ?? '' }))
 
 const quizList = reactive([...currentSet.questions])
-const answers = reactive({})
+const answers = ref([]) // ✅ fixed: only declared once
 const total = ref(quizList.length)
 const score = ref(0)
 const skipped = ref(0)
@@ -160,8 +160,6 @@ function startTimer() {
   }, 1000)
 }
 
-const answers = ref([]) // ✅ make it an array
-
 function computeScoreAndSkipped() {
   let tempScore = 0
   let tempSkipped = 0
@@ -171,20 +169,20 @@ function computeScoreAndSkipped() {
 
     if (ansIndex === undefined) {
       tempSkipped++
-    } else {
-      const selectedOption = q.options?.[ansIndex]?.trim().toLowerCase()
-      const correctAnswer = q.answer?.trim().toLowerCase()
-      if (selectedOption === correctAnswer || ansIndex === Number(q.answer)) {
-        tempScore++
-      }
+      return
+    }
+
+    const selectedOption = q.options?.[ansIndex]?.trim().toLowerCase()
+    const correctAnswer = String(q.answer).trim().toLowerCase()
+
+    if (selectedOption === correctAnswer || ansIndex === Number(q.answer)) {
+      tempScore++
     }
   })
 
   score.value = tempScore
   skipped.value = tempSkipped
 }
-
-
 
 function submitQuiz(auto = false) {
   clearInterval(timerInterval)
@@ -225,7 +223,6 @@ function closeResultModal() {
 </script>
 
 <style scoped>
-/* Simple slide-in animation for sidebar */
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 0.3s ease;
