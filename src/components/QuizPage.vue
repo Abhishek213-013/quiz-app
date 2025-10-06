@@ -68,7 +68,7 @@
                   type="radio"
                   :name="'question'+index"
                   :value="i"
-                  v-model.number="answers.value[index]"  <!-- ✅ Correct binding -->
+                  v-model.number="answers.value[index]"  
                   class="w-5 h-5 accent-indigo-500"
                 />
                 <span>{{ option }}</span>
