@@ -130,7 +130,7 @@ const currentSet = storedSets.find(s => s.id === setId) || { name: 'Unknown Set'
 currentSet.questions = currentSet.questions.map(q => ({ ...q, answer: q.answer ?? '' }))
 
 const quizList = reactive([...currentSet.questions])
-const answers = ref([]) // ✅ fixed: only declared once
+const answers = ref([]) // ✅ ONLY this version — array, reactive and compatible with v-model
 const total = ref(quizList.length)
 const score = ref(0)
 const skipped = ref(0)
@@ -175,6 +175,7 @@ function computeScoreAndSkipped() {
     const selectedOption = q.options?.[ansIndex]?.trim().toLowerCase()
     const correctAnswer = String(q.answer).trim().toLowerCase()
 
+    // Handles both text or index based answers
     if (selectedOption === correctAnswer || ansIndex === Number(q.answer)) {
       tempScore++
     }
@@ -221,6 +222,7 @@ function closeResultModal() {
   router.push('/')
 }
 </script>
+
 
 <style scoped>
 .slide-enter-active,
