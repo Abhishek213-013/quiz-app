@@ -160,23 +160,30 @@ function startTimer() {
   }, 1000)
 }
 
+const answers = ref([]) // ✅ make it an array
+
 function computeScoreAndSkipped() {
   let tempScore = 0
   let tempSkipped = 0
 
   quizList.forEach((q, i) => {
-    const ansIndex = answers[i]
+    const ansIndex = answers.value[i]
 
     if (ansIndex === undefined) {
       tempSkipped++
-    } else if (q.options?.[ansIndex] === q.answer) {
-      tempScore++
+    } else {
+      const selectedOption = q.options?.[ansIndex]?.trim().toLowerCase()
+      const correctAnswer = q.answer?.trim().toLowerCase()
+      if (selectedOption === correctAnswer || ansIndex === Number(q.answer)) {
+        tempScore++
+      }
     }
   })
 
   score.value = tempScore
   skipped.value = tempSkipped
 }
+
 
 
 function submitQuiz(auto = false) {
