@@ -68,7 +68,7 @@
                   type="radio"
                   :name="'question'+index"
                   :value="i"
-                  v-model.number="answers.value[index]"  <!-- ✅ Correct binding -->
+                  v-model.number="answers[index]"   
                   class="w-5 h-5 accent-indigo-500"
                 />
                 <span>{{ option }}</span>
@@ -130,7 +130,7 @@ const currentSet = storedSets.find(s => s.id === setId) || { name: 'Unknown Set'
 currentSet.questions = currentSet.questions.map(q => ({ ...q, answer: q.answer ?? '' }))
 
 const quizList = reactive([...currentSet.questions])
-const answers = ref([]) // ✅ ONLY this version — array, reactive and compatible with v-model
+const answers = reactive({})
 const total = ref(quizList.length)
 const score = ref(0)
 const skipped = ref(0)
@@ -160,12 +160,14 @@ function startTimer() {
   }, 1000)
 }
 
+const answers = ref([]) // ✅ make it an array
+
 function computeScoreAndSkipped() {
   let tempScore = 0
   let tempSkipped = 0
 
   quizList.forEach((q, i) => {
-    const ansIndex = answers.value[i]
+    const ansIndex = answers[i]
 
     if (ansIndex === undefined) {
       tempSkipped++
@@ -176,7 +178,10 @@ function computeScoreAndSkipped() {
     const correctAnswer = String(q.answer).trim().toLowerCase()
 
     // Handles both text or index based answers
-    if (selectedOption === correctAnswer || ansIndex === Number(q.answer)) {
+    if (
+      selectedOption === correctAnswer || 
+      ansIndex === Number(q.answer)
+    ) {
       tempScore++
     }
   })
@@ -184,6 +189,9 @@ function computeScoreAndSkipped() {
   score.value = tempScore
   skipped.value = tempSkipped
 }
+
+
+
 
 function submitQuiz(auto = false) {
   clearInterval(timerInterval)
@@ -223,8 +231,8 @@ function closeResultModal() {
 }
 </script>
 
-
 <style scoped>
+/* Simple slide-in animation for sidebar */
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 0.3s ease;
